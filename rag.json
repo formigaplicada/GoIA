@@ -274,10 +274,4 @@
     "title": "Conta corrente de condómino",
     "text": "Registo histórico completo da relação financeira: quotas emitidas, pagamentos, devoluções, isenções, saldo. Para condóminos com múltiplas frações apresenta saldo consolidado se tiverem o mesmo NIF."
   },
-  {
-    "id": "teste-de-ligacao",
-    "title": "Teste de ligacao",
-    "text": "Se vires isto, esta a funcionar.",
-    "type": "qa"
-  }
 ]
