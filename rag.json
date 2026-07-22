@@ -273,11 +273,5 @@
     "id": "video-conta-corrente",
     "title": "Conta corrente de condómino",
     "text": "Registo histórico completo da relação financeira: quotas emitidas, pagamentos, devoluções, isenções, saldo. Para condóminos com múltiplas frações apresenta saldo consolidado se tiverem o mesmo NIF."
-  },
-  {
-    "id": "qual-o-valor-do-programa",
-    "title": "Qual o valor do programa",
-    "text": "Para consultar os valores / preços da plataforma deve ir à opção **Preços** existente na página inicial do GO Condomínios",
-    "type": "qa"
   }
 ]
