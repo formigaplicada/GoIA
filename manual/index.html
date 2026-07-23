@@ -2472,31 +2472,8 @@
     </div>
   </div>
 
-  <!-- Setup Screen -->
-  <div id="api-setup">
-    <div class="setup-title">Configurar Agente</div>
-    <div class="setup-desc">
-      Introduza a sua chave API da Anthropic para activar o assistente.
-      Obtenha em <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
-    </div>
-    <div class="setup-input-wrap">
-      <input type="password" class="setup-input" id="api-key-input"
-        placeholder="sk-ant-api03-..."
-        onkeydown="if(event.key==='Enter') startChat()" />
-      <button class="toggle-key" onclick="toggleKeyVisibility()" title="Mostrar/ocultar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-      </button>
-    </div>
-    <button class="setup-btn" onclick="startChat()">Iniciar Assistente →</button>
-    <div class="setup-note">
-      🔒 A chave API é usada apenas localmente no seu browser e nunca é guardada nem enviada para terceiros.
-    </div>
-  </div>
-
   <!-- Chat Interface -->
-  <div id="chat-interface" style="display:none; flex:1; flex-direction:column; overflow:hidden; min-height:0;">
+  <div id="chat-interface" style="display:flex; flex:1; flex-direction:column; overflow:hidden; min-height:0;">
     <div id="messages"></div>
     <div id="suggestions-wrap" class="suggestions"></div>
     <div id="error-area"></div>
@@ -2516,10 +2493,12 @@
 </div>
 
 <script>
-let apiKey = '';
-  let chatHistory = [];
+let chatHistory = [];
   let isOpen = false;
   let isLoading = false;
+  let started = false;
+
+  const CHAT_API_URL = 'https://gocondominios-rag-enrich.formigaplicada.workers.dev/chat';
 
   // ── LOGGING ────────────────────────────────────────
   async function getUserIP() {
@@ -2551,35 +2530,6 @@ let apiKey = '';
     }
   }
   // ──────────────────────────────────────────────────────────────
-  const SYSTEM_PROMPT = `És o assistente de suporte oficial do Gocondominios.pt, uma plataforma portuguesa de gestão de condomínios.
-
-O teu papel é ajudar os utilizadores com:
-- Funcionalidades da plataforma (gestão de quotas, convocatórias, atas, obras, contabilidade, etc.)
-- Como-fazer e tutoriais passo a passo
-- Resolução de problemas técnicos comuns
-- Boas práticas de gestão de condomínios em Portugal
-- Legislação relevante (Regime de Propriedade Horizontal, Decreto-Lei 268/94, etc.)
-
-Regras de comportamento:
-- Responde SEMPRE em português europeu (não brasileiro)
-- Sê conciso, claro e amigável — usa parágrafos curtos
-- Para processos, fornece passos numerados
-- Se não souberes algo específico, sugere que o utilizador contacte suporte@gocondominios.pt
-- Nunca inventes funcionalidades que não conheces com certeza
-- Quando relevante, menciona que podem agendar uma demonstração em gocondominios.pt
-
-Funcionalidades principais do Gocondominios:
-- Gestão de quotas e pagamentos dos condóminos
-- Emissão de avisos e recibos automáticos
-- Convocatórias e atas de assembleias de condóminos
-- Gestão de obras, orçamentos e fornecedores
-- Comunicação interna com condóminos
-- Relatórios financeiros e mapas de contas
-- Portal do condómino (acesso online e app móvel)
-- Integração com contabilidade e bancos
-
-Tom: profissional mas acessível. Usa "você" para tratar o utilizador.`;
-
   const SUGGESTIONS = [
     "Como registar um pagamento?",
     "Como enviar uma convocatória?",
@@ -2593,35 +2543,18 @@ Tom: profissional mas acessível. Usa "você" para tratar o utilizador.`;
     document.getElementById('widget-launcher').classList.toggle('open', isOpen);
     document.getElementById('chat-panel').classList.toggle('open', isOpen);
     document.getElementById('badge').style.display = 'none';
-    if (isOpen && !apiKey) {
-      setTimeout(() => document.getElementById('api-key-input').focus(), 380);
+    if (isOpen && !started) {
+      startChat();
     } else if (isOpen) {
       setTimeout(() => document.getElementById('user-input').focus(), 380);
     }
   }
 
-  function toggleKeyVisibility() {
-    const input = document.getElementById('api-key-input');
-    input.type = input.type === 'password' ? 'text' : 'password';
-  }
-
   function startChat() {
-    const key = document.getElementById('api-key-input').value.trim();
-    const inputEl = document.getElementById('api-key-input');
-    if (!key || !key.startsWith('sk-')) {
-      inputEl.classList.add('input-error');
-      inputEl.placeholder = 'Chave inválida — deve começar por sk-ant-...';
-      inputEl.value = '';
-      setTimeout(() => { inputEl.classList.remove('input-error'); inputEl.placeholder = 'sk-ant-api03-...'; }, 3000);
-      return;
-    }
-    apiKey = key;
-    document.getElementById('api-setup').style.display = 'none';
-    const ci = document.getElementById('chat-interface');
-    ci.style.display = 'flex';
+    started = true;
     addBotMessage('Olá! 👋 Sou o assistente do **Gocondominios.pt**.\n\nEstou aqui para ajudar com qualquer dúvida sobre a plataforma. Como posso ajudar hoje?');
     renderSuggestions();
-    setTimeout(() => document.getElementById('user-input').focus(), 100);
+    setTimeout(() => document.getElementById('user-input').focus(), 380);
   }
 
   function renderSuggestions() {
@@ -2708,135 +2641,9 @@ Tom: profissional mas acessível. Usa "você" para tratar o utilizador.`;
   // Show notification badge after 2s
   setTimeout(() => { document.getElementById('badge').style.display = 'block'; }, 2000);
 
-  // ── RAG: Manual GO Condomínios ──────────────────────────────────────
-  // ── RAG: Manual GO Condomínios — carregado dinamicamente do rag.json (GitHub) ────────────
-  let MANUAL_SECTIONS = [];
-  const RAG_JSON_URL = 'https://raw.githubusercontent.com/formigaplicada/GoIA/main/rag.json';
-  const MANUAL_BASE_URL = 'https://goia.pages.dev/'
+  const MANUAL_BASE_URL = 'https://goia.pages.dev/';
 
-  async function loadManualSections() {
-    try {
-      const res = await fetch(RAG_JSON_URL, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      MANUAL_SECTIONS = await res.json();
-      console.log(`[GO Agente] ${MANUAL_SECTIONS.length} entradas carregadas do rag.json.`);
-    } catch (err) {
-      console.error('[GO Agente] Falha ao carregar rag.json:', err);
-      MANUAL_SECTIONS = [];
-    }
-  }
-  const MANUAL_SECTIONS_READY = loadManualSections();
-
-  function getSectionIndex() {
-    // Seccoes normais (sem "type"), mais recentes primeiro para compensar
-    // o viés de posicao do routing por LLM.
-    return [...MANUAL_SECTIONS]
-      .filter(s => !s.type)
-      .reverse()
-      .map(s => `${s.id}: ${s.title}`)
-      .join('\n');
-  }
-
-  // ── Q&A por niveis (qa4 > qa3 > qa2 > qa1 > qa) — correspondencia por palavras-chave, sem LLM ──
-  const QA_TIERS = ['qa4', 'qa3', 'qa2', 'qa1', 'qa'];
-
-  function scoreQAMatches(question, entries) {
-    const q = question.toLowerCase();
-    const words = q.split(/\s+/).filter(w => w.length > 3);
-    const scored = entries.map(item => {
-      const target = item.title.toLowerCase();
-      const matches = words.filter(w => target.includes(w)).length;
-      const score = words.length > 0 ? matches / words.length : 0;
-      return { ...item, score };
-    });
-    return scored.filter(i => i.score > 0).sort((a, b) => b.score - a.score);
-  }
-
-  function findRelevantQA(question) {
-    if (!question) return [];
-    for (const tier of QA_TIERS) {
-      const entries = MANUAL_SECTIONS.filter(s => s.type === tier);
-      if (!entries.length) continue;
-      const matches = scoreQAMatches(question, entries);
-      if (matches.length > 0) return matches.slice(0, 3);
-    }
-    return [];
-  }
-
-  async function findRelevantSections(question) {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
-        messages: [{
-          role: 'user',
-          content: `Tens um índice de secções de um manual de software de gestão de condomínios.\n\nÍndice:\n${getSectionIndex()}\n\nPergunta do utilizador: "${question}"\n\nResponde APENAS com um JSON válido: lista de objectos com "id" e "score" (0-100) de relevância. Até 5 secções. Exemplo: [{"id":"acesso","score":95},{"id":"quotas","score":82}]. Se nenhuma for relevante, responde com [].`
-        }]
-      })
-    });
-    if (!response.ok) return [];
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '[]';
-    try {
-      const parsed = JSON.parse(text.match(/\[.*\]/s)?.[0] || '[]');
-      return parsed.map(item => {
-        const section = MANUAL_SECTIONS.find(s => s.id === item.id);
-        return section ? { ...section, score: item.score } : null;
-      }).filter(Boolean);
-    } catch(e) {
-      return [];
-    }
-  }
-
-  function buildSystemPrompt(relevantSections, question) {
-    let context = '';
-    const highMatchSections = relevantSections.filter(s => s.score >= 80);
-
-
-    if (relevantSections.length > 0) {
-      context = `\n\n## Informação relevante do Manual GO Condomínios\n\n`;
-      relevantSections.forEach(s => {
-        context += `### ${s.title} [id:${s.id}]\n${s.text}\n\n`;
-      });
-      context += `\nUsa esta informação do manual como fonte primária para responder.`;
-    }
-
-    let linksInstruction = '';
-    if (highMatchSections.length > 0) {
-      const linksList = highMatchSections.map(s =>
-        `- [${s.title}](MANUAL_LINK:${s.id})`
-      ).join('\n');
-      linksInstruction = `\n\n## Links do manual\nQuando a tua resposta se basear nas secções abaixo (relevância alta), DEVES incluir no final da resposta uma linha "📖 Consulte o manual:" seguida dos links relevantes, usando EXACTAMENTE este formato: [TITULO](MANUAL_LINK:ID)\nSecções disponíveis:\n${linksList}`;
-    }
-
-    // Injectar Q&A validados se houver correspondência
-    const matchedQA = findRelevantQA(question || '');
-    let qaContext = '';
-    if (matchedQA.length > 0) {
-      qaContext = `\n\n## Respostas validadas pela equipa de suporte\n`;
-      matchedQA.forEach(item => {
-        qaContext += `\n**P:** ${item.title}\n**R:** ${item.text}\n`;
-      });
-      qaContext += `\nEstas respostas foram validadas pela equipa de suporte — usa-as como referência prioritária se forem relevantes.`;
-    }
-
-    return `${SYSTEM_PROMPT}${context}${qaContext}${linksInstruction}
-
-## Regras de fonte de informação
-- USA SEMPRE primeiro a informação do manual fornecida acima, se existir
-- Se o manual não tiver a informação, podes usar conhecimento geral fidedigno sobre gestão de condomínios em Portugal (legislação, boas práticas reconhecidas)
-- Se não tiveres confiança na resposta, NÃO inventes — diz ao utilizador para contactar o suporte:
-  📧 suporte@gocondominios.pt
-  📞 915 922 203 (suporte técnico)
-  📞 935 789 103 (questões comerciais)`;
-  }
+  // Show notification badge already handled above.
 
   async function sendMessage() {
     const input = document.getElementById('user-input');
@@ -2854,51 +2661,33 @@ Tom: profissional mas acessível. Usa "você" para tratar o utilizador.`;
     showTyping();
 
     try {
-      await MANUAL_SECTIONS_READY;
-      // Step 1: Find relevant sections
-      const relevantSections = await findRelevantSections(text);
-
-      // Step 2: Build system prompt with context
-      const systemPrompt = buildSystemPrompt(relevantSections, text);
-
-      // Step 3: Call Claude with context
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(CHAT_API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1024,
-          system: systemPrompt,
-          messages: chatHistory
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: chatHistory })
       });
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `Erro HTTP ${response.status}`);
+        throw new Error(err.message || `Erro HTTP ${response.status}`);
       }
 
       const data = await response.json();
-      const reply = data.content?.[0]?.text || 'Desculpe, não consegui gerar uma resposta.';
-      const tokensInput  = data.usage?.input_tokens  || 0;
-      const tokensOutput = data.usage?.output_tokens || 0;
+      const reply = data.reply || 'Desculpe, não consegui gerar uma resposta.';
+      const tokensInput  = data.tokensInput  || 0;
+      const tokensOutput = data.tokensOutput || 0;
       chatHistory.push({ role: 'assistant', content: reply });
       hideTyping();
       addBotMessage(reply);
 
-      // ── Guardar log no Google Sheet (não bloqueia a UI) ──
-      logConversation(text, reply, relevantSections, tokensInput, tokensOutput);
+      // ── Guardar log (não bloqueia a UI) ──
+      logConversation(text, reply, data.relevantSections || [], tokensInput, tokensOutput);
 
     } catch (err) {
       hideTyping();
       console.error(err);
       chatHistory.pop();
-      showError('Não foi possível contactar o assistente. Verifique a sua chave API e ligação à internet.');
+      showError('Não foi possível contactar o assistente. Tente novamente dentro de momentos.');
     } finally {
       isLoading = false;
       document.getElementById('send-btn').disabled = false;
