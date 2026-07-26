@@ -297,5 +297,11 @@
     "title": "O saldo  extrato bancário não esta a bater certo com o saldo extrato bancário do banco",
     "text": "Entendo a sua preocupação. Quando o saldo do GO Condomínios não coincide com o do banco, geralmente há alguns pontos a verificar:\n\n**Possíveis causas:**\n\n1. **Movimentos pendentes** — Cheques emitidos, transferências ou débitos que ainda não foram processados pelo banco\n2. **Diferenças de datas** — O banco processa movimentos em datas diferentes do registo interno\n3. **Operações bancárias não registadas** — Comissões, juros ou outras operações que ainda não foram lançadas no GO Condomínios\n4. **Movimentos com estado incorrecto** — Verificar se todos os movimentos registados têm o estado correcto (Recebido, Pago, etc.)\n\n**O que fazer:**\n\n- Consulte em **Movimentos do Condomínio** todos os registos e compare com o extrato bancário\n- Verifique a **reconciliação mensal** — confirme que todos os movimentos do mês estão correctos\n- Identifique operações que constam no banco mas não no GO Condomínios (ou vice-versa)\n- Se necessário, pode alterar o \"Saldo inicial\" da conta bancária. Isso é feito em **Contabilidade** > **Contas bancárias e Fundo de Maneio**, editando a conta bancária. De notar que a data inicial aí presente não afeta o cálculo do saldo bancário, é apenas informativa",
     "type": "qa4"
+  },
+  {
+    "id": "qual-o-preco-do-programa",
+    "title": "Qual o preço do programa",
+    "text": "Para consultar os valores / preços da plataforma deve ir à opção **Preços** existente na página inicial do GO Condomínios",
+    "type": "qa4"
   }
 ]
