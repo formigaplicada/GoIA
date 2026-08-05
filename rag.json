@@ -309,5 +309,11 @@
     "title": "acertar o saldo bancário",
     "text": "Para acertar o saldo bancário, o processo envolve registar os movimentos em falta ou corrigir os existentes. Aqui está como proceder:\n\n**Passo a passo:**\n\n1. **Identifique as diferenças** — Compare o extrato do banco com o GO Condomínios movimento a movimento\n\n2. **Registar movimentos em falta** — Se há operações no banco que não constam no GO Condomínios:\n   - Vá a **Contabilidade > Movimentos do Condomínio > Registar Movimento**\n   - Preencha os campos (tipo, descritivo, data, valor, estado)\n   - Grave o movimento\n\n3. **Corrigir movimentos** — Se há registos com dados incorretos:\n   - Edite o movimento existente com os dados corretos\n\n4. **Verificar estados** — Confirme que todos os movimentos têm o estado adequado (Recebido, Pago, Por pagar, etc.)\n\n5. **Reconciliação** — Após registar ou corrigir, compare novamente com o extrato bancário\n\n6. **Saldo inicial** — Se necessário, pode alterar \"Saldo inicial\" da conta bancária. Isso é feito em **Contabilidade** > **Contas bancárias e Fundo de Maneio**, editando a conta bancária. De notar que a data inicial aí presente não afeta o cálculo do saldo bancário, é apenas informativa",
     "type": "qa1"
+  },
+  {
+    "id": "como-colocar-saldo-inicial-do-predio-condominio",
+    "title": "como colocar saldo inicial do prédio / condomínio",
+    "text": "# Como Colocar Saldo Inicial do Prédio / Condomínio\n\nIsso é feito em **Contabilidade** > **Contas bancárias e Fundo de Maneio**, editando a conta bancária. De notar que a data inicial aí presente não afeta o cálculo do saldo bancário, é apenas informativa",
+    "type": "qa1"
   }
 ]
