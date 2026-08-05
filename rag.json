@@ -327,5 +327,11 @@
     "title": "recibo com o saldo de conta corrente",
     "text": "Retirámos essa funcionalidade nos recibos de quotas porque consideramos que pode trazer alguns mal-entendidos, é que o saldo de conta corrente depende da data, e um mesmo recibo pode ser reenviado em alturas diferentes, tendo assim valores diferentes para o saldo de conta corrente. No fundo o saldo de conta corrente nada tem a haver com recibos. De forma rigorosa, tem a possibilidade de envio de \"Conta corrente\" em qualquer altura, disponível em **Condóminos** -> **Conta corrente**, onde consta o respetivo saldo com a indicação da respetiva data.",
     "type": "qa1"
+  },
+  {
+    "id": "tirar-conta-corrente-a-determinada-data",
+    "title": "tirar conta corrente a determinada data",
+    "text": "A conta corrente de condómino pode ser obtida em **Condóminos** -> **Conta corrente**. Por defeito aparece a conta corrente na data atual, tem a possibilidade de outra data de referência. Também pode enviar e-mail ao condómino com a respetiva conta corrente.",
+    "type": "qa1"
   }
 ]
