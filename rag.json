@@ -315,5 +315,11 @@
     "title": "como colocar saldo inicial do prédio / condomínio",
     "text": "# Como Colocar Saldo Inicial do Prédio / Condomínio\n\nIsso é feito em **Contabilidade** > **Contas bancárias e Fundo de Maneio**, editando a conta bancária. De notar que a data inicial aí presente não afeta o cálculo do saldo bancário, é apenas informativa",
     "type": "qa1"
+  },
+  {
+    "id": "como-colocar-saldo-inicial-do-predio-condominio-2",
+    "title": "como colocar saldo inicial do predio / condominio",
+    "text": "O saldo inicial é um campo essencial para registar a posição financeira real da conta no momento em que começa a usar a plataforma GO Condomínios. Deve corresponder ao saldo que consta no extrato bancário da sua instituição financeira.\n\n**Como proceder:**\n\n1. Aceda à secção de **Contas Bancárias e Fundo de Maneio**\n2. Selecione a conta que pretende editar\n3. Introduza o valor do saldo inicial conforme o extrato bancário\n4. Guarde as alterações\n\nDesta forma, todos os movimentos financeiros posteriores (receitas, despesas, recebimentos) ficarão corretamente registados a partir dessa base.",
+    "type": "qa1"
   }
 ]
