@@ -321,5 +321,11 @@
     "title": "Saldo inicial",
     "text": "O saldo inicial é um campo essencial para registar a posição financeira real da conta no momento em que começa a usar a plataforma GO Condomínios. Deve corresponder ao saldo que consta no extrato bancário da sua instituição financeira.\n\n**Como proceder:**\n\n1. Aceda à secção de **Contas Bancárias e Fundo de Maneio**\n2. Selecione a conta que pretende editar\n3. Introduza o valor do saldo inicial conforme o extrato bancário\n4. Guarde as alterações\n\nDesta forma, todos os movimentos financeiros posteriores (receitas, despesas, recebimentos) ficarão corretamente registados a partir dessa base.",
     "type": "qa1"
+  },
+  {
+    "id": "recibo-com-o-saldo-de-conta-corrente",
+    "title": "recibo com o saldo de conta corrente",
+    "text": "Retirámos essa funcionalidade nos recibos de quotas porque consideramos que pode trazer alguns mal-entendidos, é que o saldo de conta corrente depende da data, e um mesmo recibo pode ser reenviado em alturas diferentes, tendo assim valores diferentes para o saldo de conta corrente. No fundo o saldo de conta corrente nada tem a haver com recibos. De forma rigorosa, tem a possibilidade de envio de \"Conta corrente\" em qualquer altura, disponível em **Condóminos** -> **Conta corrente**, onde consta o respetivo saldo com a indicação da respetiva data.",
+    "type": "qa1"
   }
 ]
