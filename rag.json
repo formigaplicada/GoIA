@@ -333,5 +333,11 @@
     "title": "tirar conta corrente a determinada data",
     "text": "A conta corrente de condómino pode ser obtida em **Condóminos** -> **Conta corrente**. Por defeito aparece a conta corrente na data atual, tem a possibilidade de outra data de referência. Também pode enviar e-mail ao condómino com a respetiva conta corrente.",
     "type": "qa1"
+  },
+  {
+    "id": "contatos-e-horario-para-suporte",
+    "title": "Contatos e horario para suporte",
+    "text": "# Contactos da Equipa de Suporte\n\nCom base na informação disponível, aqui estão os contactos do GO Condomínios:\n\n📧 **Email:** suporte@gocondominios.pt\n\n📞 **Telefone apoio comercial:** 935 789 103 (chamada para rede móvel nacional)\n\n📞 **Telefone apoio técnico:** 915 922 203 (chamada para rede móvel nacional)\n\nHorário:** Dias úteis das 10h às 13h  e das 14h às 18h",
+    "type": "qa1"
   }
 ]
